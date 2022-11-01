@@ -1,3 +1,9 @@
+-- noinspection SqlDialectInspectionForFile
+
+-- noinspection SqlNoDataSourceInspectionForFile
+
+-- this file must start with Capital V__ (dash dash)
+
 drop table if exists book;
 drop table if exists hibernate_sequence;
 

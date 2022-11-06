@@ -2,8 +2,10 @@ package guru.springframework.sdjpaintro.bootstrap;
 
 import guru.springframework.sdjpaintro.domain.AuthorPrimaryKeyUuid;
 import guru.springframework.sdjpaintro.domain.Book;
+import guru.springframework.sdjpaintro.domain.BookNatural;
 import guru.springframework.sdjpaintro.domain.BookUuid;
 import guru.springframework.sdjpaintro.repositories.AuthorUuidRepository;
+import guru.springframework.sdjpaintro.repositories.BookNaturalRepository;
 import guru.springframework.sdjpaintro.repositories.BookRepository;
 import guru.springframework.sdjpaintro.repositories.BookUuidRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -20,11 +22,13 @@ public class DataInitializer implements CommandLineRunner {
     private final BookRepository bookRepository;
     private final AuthorUuidRepository authorUuidRepository;
     private final BookUuidRepository bookUuidRepository;
+    private final BookNaturalRepository bookNaturalRepository;
 
-    public DataInitializer(BookRepository bookRepository, AuthorUuidRepository authorUuidRepository, BookUuidRepository bookUuidRepository) {
+    public DataInitializer(BookRepository bookRepository, AuthorUuidRepository authorUuidRepository, BookUuidRepository bookUuidRepository, BookNaturalRepository bookNaturalRepository) {
         this.bookRepository = bookRepository;
         this.authorUuidRepository = authorUuidRepository;
         this.bookUuidRepository = bookUuidRepository;
+        this.bookNaturalRepository = bookNaturalRepository;
     }
 
     @Override
@@ -56,5 +60,15 @@ public class DataInitializer implements CommandLineRunner {
 
         BookUuid savedBookedUuid = bookUuidRepository.save(bookUuid);
         System.out.println("Saved BookUuid with id: " + savedBookedUuid.getId());
+
+        //Natural Key example: NOT recommended - Natural key is defining one of the props of the object als PK
+        //Like in this example the title is PK - As develop we are responsible ofc always to set this ID
+
+        BookNatural bookNatural = new BookNatural();
+        bookNatural.setTitle("NOTRECOMMENDED");
+        bookNatural.setIsbn("122345");
+        bookNatural.setPublisher("NOTRECOMMENDED");
+        BookNatural savedBN = bookNaturalRepository.save(bookNatural);
+        System.out.println("The BookNatural is saved with ID, id is Title here: " + savedBN.getTitle());
     }
 }

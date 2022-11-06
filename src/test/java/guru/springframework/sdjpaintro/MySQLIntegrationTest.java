@@ -1,8 +1,10 @@
 package guru.springframework.sdjpaintro;
 
 import guru.springframework.sdjpaintro.domain.AuthorPrimaryKeyUuid;
+import guru.springframework.sdjpaintro.domain.BookNatural;
 import guru.springframework.sdjpaintro.domain.BookUuid;
 import guru.springframework.sdjpaintro.repositories.AuthorUuidRepository;
+import guru.springframework.sdjpaintro.repositories.BookNaturalRepository;
 import guru.springframework.sdjpaintro.repositories.BookRepository;
 import guru.springframework.sdjpaintro.repositories.BookUuidRepository;
 import org.junit.jupiter.api.Order;
@@ -33,10 +35,26 @@ public class MySQLIntegrationTest {
     @Autowired
     AuthorUuidRepository authorUuidRepository;
 
+    @Autowired
+    BookNaturalRepository bookNaturalRepository;
+
     @Test
     void testMySQL() {
         long countBefore = bookRepository.count();
         assertThat(countBefore).isEqualTo(2);
+
+    }
+
+    @Test
+    void testBookNaturalRepository() {
+        BookNatural bookNatural = new BookNatural();
+        bookNatural.setTitle("my book");
+        BookNatural saved = bookNaturalRepository.save(bookNatural);
+        assertThat(saved).isNotNull();
+
+        BookNatural fetched = bookNaturalRepository.getReferenceById(bookNatural.getTitle());
+        assertThat(fetched).isNotNull();
+        assertThat(fetched.getTitle()).isEqualToIgnoringCase(saved.getTitle());
 
     }
 

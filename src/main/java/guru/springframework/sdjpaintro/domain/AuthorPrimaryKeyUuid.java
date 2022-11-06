@@ -1,31 +1,27 @@
 package guru.springframework.sdjpaintro.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import org.hibernate.annotations.Type;
 
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
-public class Author {
+public class AuthorPrimaryKeyUuid {
 
-    /*GenerationType.AUTO means 'let hibernate automatically choose the id
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)*/
-
-    // GenerationType.IDENTITY means like telling underlying DB to generate and auto_increment the id (pk)
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Type(type = "org.hibernate.type.UUIDCharType") // telling hibernate that id is chartype like 1133FFRRR333, so it's a String
+    @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
+    private UUID id;
     private String firstName;
     private String lastName;
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -50,9 +46,9 @@ public class Author {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Author author = (Author) o;
+        AuthorPrimaryKeyUuid that = (AuthorPrimaryKeyUuid) o;
 
-        return Objects.equals(id, author.id);
+        return Objects.equals(id, that.id);
     }
 
     @Override

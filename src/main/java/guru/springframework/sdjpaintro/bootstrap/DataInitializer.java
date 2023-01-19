@@ -4,10 +4,9 @@ import guru.springframework.sdjpaintro.domain.AuthorPrimaryKeyUuid;
 import guru.springframework.sdjpaintro.domain.Book;
 import guru.springframework.sdjpaintro.domain.BookNatural;
 import guru.springframework.sdjpaintro.domain.BookUuid;
-import guru.springframework.sdjpaintro.repositories.AuthorUuidRepository;
-import guru.springframework.sdjpaintro.repositories.BookNaturalRepository;
-import guru.springframework.sdjpaintro.repositories.BookRepository;
-import guru.springframework.sdjpaintro.repositories.BookUuidRepository;
+import guru.springframework.sdjpaintro.domain.composite.AuthorComposite;
+import guru.springframework.sdjpaintro.domain.composite.NameId;
+import guru.springframework.sdjpaintro.repositories.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -23,12 +22,14 @@ public class DataInitializer implements CommandLineRunner {
     private final AuthorUuidRepository authorUuidRepository;
     private final BookUuidRepository bookUuidRepository;
     private final BookNaturalRepository bookNaturalRepository;
+    private final AuthorCompositeRepository authorCompositeRepository;
 
-    public DataInitializer(BookRepository bookRepository, AuthorUuidRepository authorUuidRepository, BookUuidRepository bookUuidRepository, BookNaturalRepository bookNaturalRepository) {
+    public DataInitializer(BookRepository bookRepository, AuthorUuidRepository authorUuidRepository, BookUuidRepository bookUuidRepository, BookNaturalRepository bookNaturalRepository, AuthorCompositeRepository authorCompositeRepository) {
         this.bookRepository = bookRepository;
         this.authorUuidRepository = authorUuidRepository;
         this.bookUuidRepository = bookUuidRepository;
         this.bookNaturalRepository = bookNaturalRepository;
+        this.authorCompositeRepository = authorCompositeRepository;
     }
 
     @Override
@@ -70,5 +71,15 @@ public class DataInitializer implements CommandLineRunner {
         bookNatural.setPublisher("NOTRECOMMENDED");
         BookNatural savedBN = bookNaturalRepository.save(bookNatural);
         System.out.println("The BookNatural is saved with ID, id is Title here: " + savedBN.getTitle());
+
+        //Composite key is combining 2 properties in a key like firstName and lastname
+        NameId nameId = new NameId("serdar", "okcira");
+        AuthorComposite authComposite = new AuthorComposite();
+        authComposite.setFirstName(nameId.getFirstName());
+        authComposite.setLastName(nameId.getLastName());
+        authComposite.setCountry("TR");
+        authorCompositeRepository.save(authComposite);
+
+        System.out.println("The composite author saved");
     }
 }
